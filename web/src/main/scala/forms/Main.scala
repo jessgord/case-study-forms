@@ -7,12 +7,12 @@ object Main {
   val appContainer: dom.Element = dom.document.querySelector("#appContainer")
   val weather = TextQuestion.apply.withLabel("What is the weather like?")
   val awesome = BooleanQuestion.apply.withLabel("Is everything awesome?")
-  val cats = BooleanQuestion.apply.withStyle(Style.boolean.choice("Cats", "Moar Cats")).withLabel("Cats?")
+  // val cats = BooleanQuestion.apply.withStyle(Style.boolean.choice("Cats", "Moar Cats")).withLabel("Cats?")
   val multiChoice = MultipleChoice(List(("42", 42), ("Zero", 0), ("One", 1))).withLabel("What is the meaning of life")
-  val numbers = IntQuestion.apply.withLabel("What's your favourite number?")
-  val question = weather.product(awesome).product(cats).product(numbers).product(multiChoice)
+  val numbers = IntQuestion.apply.withLabel("What's your favourite number?").withValidation(_ < 10)
+  val question = weather.product(awesome).product(numbers).product(multiChoice)
 
-  val form = Form("The Awesome Form", question)
+  val form = Form("The Amazingly Awesome Form", question)
    
   val appElement: HtmlElement =
     Render.render(form)

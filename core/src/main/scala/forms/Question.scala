@@ -10,7 +10,8 @@ final case class Product[A, B](left: Question[A], right: Question[B])
 final case class IntQuestion(
     initialValue: Option[Int],
     label: Option[String],
-    placeholder: Option[Int]
+    placeholder: Option[Int],
+    predicate: Option[Int => Boolean]
 ) extends Question[Int] {
   def withInitialValue(initialValue: Int): IntQuestion =
     this.copy(initialValue = Some(initialValue))
@@ -23,6 +24,14 @@ final case class IntQuestion(
 
   def withPlaceholder(placeholder: Int): IntQuestion =
     this.copy(placeholder = Some(placeholder))
+    
+  def withValidation(predicate: Int => Boolean): IntQuestion = 
+    this.copy(predicate = Some(predicate))
+}
+
+object IntQuestion {
+  def apply: IntQuestion =
+    IntQuestion(None, None, None, None)
 }
 
 final case class TextQuestion(
@@ -41,11 +50,6 @@ final case class TextQuestion(
 
   def withPlaceholder(placeholder: String): TextQuestion =
     this.copy(placeholder = Some(placeholder))
-}
-
-object IntQuestion {
-  def apply: IntQuestion =
-    IntQuestion(None, None, None)
 }
 
 object TextQuestion {

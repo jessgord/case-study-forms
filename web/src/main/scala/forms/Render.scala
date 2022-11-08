@@ -42,7 +42,7 @@ def render[A](form: Form[A]): HtmlElement = {
             )
           (html, textValue.signal)
           
-        case IntQuestion(initialValue, intLabel, pHolder) =>
+        case IntQuestion(initialValue, intLabel, pHolder, predicate) =>
           val intValue = Var(0)
           val html =
             div(
@@ -51,7 +51,8 @@ def render[A](form: Form[A]): HtmlElement = {
                 typ := "number",
                 initialValue.map(iV => value := iV.toString).orElse(pHolder.map(pH => placeholder := pH.toString)),
                 onInput.mapToValue.map(str => str.toInt) --> intValue
-              )
+              ),
+              p(State.validate(intValue, predicate, "ERROR TBC"))
               // p(
               //   "Your lucky number is: ",
               //   child.text <-- intValue
@@ -67,21 +68,25 @@ def render[A](form: Form[A]): HtmlElement = {
               case Checkbox =>
                 div(
                   renderLabel(boolLabel),
-                  input(typ := "checkbox", name := "true") 
-                  // p(
-                  // s"$boolLabel",
-                  // child.text <-- boolValue
-                  // )
+                  input(
+                    typ := "checkbox",
+                    name := "true",
+                    onInput.mapToChecked --> boolValue
+                  ),
+                  p(
+                  s"$boolLabel",
+                  child.text <-- boolValue
+                  )
                 )
               case Choice(t, f) => 
                 div(
                   renderLabel(boolLabel),
-                  renderLabel(t), input(typ := "radio"),
-                  renderLabel(f), input(typ := "radio")
-                  // p(
-                  // s"$boolLabel",
-                  // child.text <-- boolValue
-                  // )
+                  renderLabel(t), input(typ := "radio", onInput.mapToChecked --> boolValue),
+                  renderLabel(f), input(typ := "radio", onInput.mapToChecked --> boolValue),
+                  p(
+                  s"$boolLabel",
+                  child.text <-- boolValue
+                  )
                 )
                 
             }
