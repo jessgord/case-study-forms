@@ -56,6 +56,7 @@ object TextQuestion {
 // IntQuestion.apply.withInitialValue(0)
 
 final case class BooleanQuestion(
+    style: Style.BooleanStyle,
     initialValue: Option[Boolean],
     label: Option[String]
 ) extends Question[Boolean] {
@@ -64,10 +65,13 @@ final case class BooleanQuestion(
 
   def withLabel(label: String): BooleanQuestion =
     this.copy(label = Some(label))
+
+  def withStyle(style: Style.BooleanStyle): BooleanQuestion =
+    this.copy(style = style)
 }
 object BooleanQuestion {
   def apply: BooleanQuestion =
-    BooleanQuestion(None, None)
+    BooleanQuestion(Style.boolean.checkbox, None, None)
 
   def empty: BooleanQuestion =
     BooleanQuestion.apply
@@ -81,12 +85,12 @@ object BooleanQuestion {
 //  0 - 10000 Low()
 // 10000 - 20000 Mid()
 // 20000+ High()
-final case class Checkbox[A](label: Option[String], choices: List[(String, A)])
+final case class MultipleChoice[A](label: Option[String], choices: List[(String, A)])
     extends Question[List[A]] {
-  def withLabel(label: String): Checkbox[A] =
+  def withLabel(label: String): MultipleChoice[A] =
     this.copy(label = Some(label))
 }
-object Checkbox {
-  def apply[A](choices: List[(String, A)]): Checkbox[A] =
-    Checkbox(None, choices)
+object MultipleChoice {
+  def apply[A](choices: List[(String, A)]): MultipleChoice[A] =
+    MultipleChoice(None, choices)
 }
